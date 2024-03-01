@@ -1,6 +1,11 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { getFirestore, doc, setDoc } from "firebase/firestore";
 import "../firebase";
 import { useRouter } from "next/navigation";
@@ -73,6 +78,23 @@ export default function SignUp() {
       setError("Error signing up: " + error.message);
     }
   };
+  const handleGoogleSignUp = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // После успешного входа, можно сохранить данные пользователя в Firestore или выполнить другие действия
+      const user = result.user;
+      setIsRegistered(true);
+
+      await setDoc(doc(getFirestore(), "users", user.uid), {
+        name: user.displayName,
+        email: user.email,
+      });
+    } catch (error) {
+      setError("Error during sign up with Google: " + error.message);
+    }
+  };
+
   return (
     <section className="w-full h-full flex flex-col justify-center p-4 md:p-20">
       <h2 className="text-3xl font-bold text-gray-900 mb-4">Sign Up</h2>
@@ -163,7 +185,12 @@ export default function SignUp() {
           </Link>
         </span>
         <div className="flex text-[30px] gap-2 cursor-not-allowed text-gray-500">
-          <FaGoogle />
+          <button
+            onClick={handleGoogleSignUp}
+            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Sign Up with Google
+          </button>
           <FaFacebook />
         </div>
       </div>
