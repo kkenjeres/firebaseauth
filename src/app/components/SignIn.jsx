@@ -42,7 +42,7 @@ export default function SignIn({ onChangeView }) {
     await signOut(auth);
   };
   return (
-    <section className="w-full h-full flex flex-col justify-center p-20 ">
+    <section className="w-full h-full flex flex-col justify-center p-4 md:p-20 ">
       {loggedIn ? (
         <>
           <h2 className="text-3xl font-bold text-gray-900 mb-4 ">

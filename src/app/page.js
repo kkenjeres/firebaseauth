@@ -7,9 +7,9 @@ export default function Home() {
   const [currentView, setCurrentView] = useState("signIn");
 
   return (
-    <main className="flex h-screen">
-      <div className="w-[60%] bg-purple-500"></div>
-      <div className="w-[40%]">
+    <main className="md:flex h-screen">
+      <div className="md:w-[60%] bg-purple-500"></div>
+      <div className="md:w-[40%] w-full">
         {currentView === "signIn" && <SignIn onChangeView={setCurrentView} />}
         {currentView === "passwordReset" && (
           <PasswordReset onChangeView={setCurrentView} />

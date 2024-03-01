@@ -13,13 +13,13 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [isRegistered, setIsRegistered] = useState(false); 
+  const [isRegistered, setIsRegistered] = useState(false);
   const router = useRouter();
   const auth = getAuth();
 
   useEffect(() => {
     if (isRegistered) {
-      router.push("/"); 
+      router.push("/");
     }
   }, [isRegistered, router]);
   const resetForm = () => {
@@ -62,8 +62,8 @@ export default function SignUp() {
         email,
         password
       );
-      resetForm()
-      setIsRegistered(true); 
+      resetForm();
+      setIsRegistered(true);
 
       await setDoc(doc(getFirestore(), "users", userCredential.user.uid), {
         name,
@@ -74,7 +74,7 @@ export default function SignUp() {
     }
   };
   return (
-    <section className="w-full h-full flex flex-col justify-center p-20">
+    <section className="w-full h-full flex flex-col justify-center p-4 md:p-20">
       <h2 className="text-3xl font-bold text-gray-900 mb-4">Sign Up</h2>
       <small className="text-gray-700">Create your new account</small>
       <form className="my-10 flex flex-col gap-4" onSubmit={handleSignUp}>
