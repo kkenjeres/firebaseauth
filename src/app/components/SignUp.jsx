@@ -184,14 +184,9 @@ export default function SignUp() {
             Login
           </Link>
         </span>
-        <div className="flex text-[30px] gap-2 cursor-not-allowed text-gray-500">
-          <button
-            onClick={handleGoogleSignUp}
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-          >
-            Sign Up with Google
-          </button>
-          <FaFacebook />
+        <div className="flex text-[30px] gap-2 ">
+          <FaGoogle onClick={handleGoogleSignUp} className="cursor-pointer" />
+          <FaFacebook className="cursor-not-allowed text-gray-500" />
         </div>
       </div>
     </section>

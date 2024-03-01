@@ -2,12 +2,14 @@
 import { useState, useEffect } from "react";
 import {
   getAuth,
-  signInWithEmailAndPassword,
-  onAuthStateChanged,
-  signOut,
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import "../firebase";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 export default function SignIn({ onChangeView }) {
   const [email, setEmail] = useState("");
@@ -16,6 +18,8 @@ export default function SignIn({ onChangeView }) {
   const [userEmail, setUserEmail] = useState(null);
   const [loggedIn, setLoggedIn] = useState(false);
   const auth = getAuth();
+  const router = useRouter();
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -40,6 +44,22 @@ export default function SignIn({ onChangeView }) {
   };
   const handleLogout = async () => {
     await signOut(auth);
+  };
+  const handleGoogleSignUp = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      // После успешного входа, можно сохранить данные пользователя в Firestore или выполнить другие действия
+      const user = result.user;
+      router.push("/");
+
+      await setDoc(doc(getFirestore(), "users", user.uid), {
+        name: user.displayName,
+        email: user.email,
+      });
+    } catch (error) {
+      setError("Error during sign up with Google: " + error.message);
+    }
   };
   return (
     <section className="w-full h-full flex flex-col justify-center p-4 md:p-20 ">
@@ -118,9 +138,13 @@ export default function SignIn({ onChangeView }) {
               </Link>
             </span>
             <small className="text-gray-400">or continue with</small>
-            <div className="flex text-[30px] gap-2 cursor-not-allowed text-gray-500">
-              <FaGoogle />
-              <FaFacebook />
+            <div className="flex text-[30px] gap-2 ">
+              <FaGoogle
+                onClick={handleGoogleSignUp}
+                className="cursor-pointer"
+              />
+
+              <FaFacebook className="cursor-not-allowed text-gray-500" />
             </div>
           </div>
         </>
